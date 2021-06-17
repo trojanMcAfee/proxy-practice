@@ -7,7 +7,7 @@ const proxyAdd = '0xf71aB1E241b6E4fCBFf82a3f1568846A426e9822';
 async function delegate() {
 
     const proxyContract = await hre.ethers.getContractAt('Proxy', proxyAdd);
-    const proxyLogic = await ethers.getContractAt(logicABI, proxyAdd);
+    const proxyLogic = await ethers.getContractAt('Logic', proxyAdd);
    
     const value = hre.ethers.utils.parseEther('0.0001');
 
@@ -26,3 +26,5 @@ delegate()
     console.error(error);
     process.exit(1);
   });
+
+  
