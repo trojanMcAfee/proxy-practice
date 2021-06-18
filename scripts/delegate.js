@@ -11,13 +11,16 @@ async function delegate() {
    
     const value = hre.ethers.utils.parseEther('0.0001');
 
-    const tx = await proxyContract.setVars(logicAdd, 15, { value });
-    const receipt = await tx.wait();
-    console.log(receipt);
-
     proxyLogic.on("ProxyEvent", () => {
-        console.log('hello');
+        console.log('hi');
+        // console.log('This is the num: ', num);
+        // console.log('This is the sender: ', sender);
+        // console.log('This is the value: ', value);
     });
+    
+    const tx = await proxyContract.setVars(logicAdd, 15, { value });
+    await tx.wait();
+
 };
 
 delegate()

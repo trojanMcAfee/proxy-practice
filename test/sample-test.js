@@ -5,6 +5,8 @@ describe("MyProxy", function() {
   let proxy;
   let logic;
   let iLogic;
+  let proxyLogic
+  // const proxyAdd = '0xf71aB1E241b6E4fCBFf82a3f1568846A426e9822';
   before(async () => {
     const Proxy = await ethers.getContractFactory("Proxy");
     proxy = await Proxy.deploy();
@@ -15,9 +17,10 @@ describe("MyProxy", function() {
     await logic.deployed();
 
     iLogic = new ethers.utils.Interface(logicABI);
+    proxyLogic = await ethers.getContractAt("Logic", proxy.address);
   });
 
-  it("should run delegatecall", async function() {
+  xit("should run delegatecall", async function() {
     
     const tx = await proxy.setVars(logic.address, 15, { value, gasLimit: 100000 });
     const receipt = await tx.wait();
@@ -28,4 +31,23 @@ describe("MyProxy", function() {
     console.log('This is the sender: ', sender);
     console.log('This is the value: ', ethers.utils.formatEther(value2.toString()));    
   });
+
+  it("should emit an event with on", async function() {
+
+    // const proxyLogic = await ethers.getContractAt("Logic", proxyAdd);
+    // console.log(proxyLogic);
+
+    await proxyLogic.on("ProxyEvent", () => {
+        console.log('hi');
+        // console.log('This is the num: ', num);
+        // console.log('This is the sender: ', sender);
+        // console.log('This is the value: ', value);
+    });
+    
+    const tx = await proxy.setVars(logic.address, 15, { value, gasLimit: 100000 });
+    await tx.wait();
+   
+  });
+
+  
 });
